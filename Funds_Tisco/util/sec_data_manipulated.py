@@ -1,6 +1,7 @@
 import pandas as pd
 import urllib.request, json
-from typing import List, Dict, Any
+
+
 
 def get_all_amc_df():
     try:
@@ -30,23 +31,15 @@ def get_all_amc_df():
     
     return all_am_df_final
 
-def get_all_unique_id(df) -> List:
+def get_all_unique_id(df):
     return list(df['unique_id'])
 
-def get_funds_under_amc(amc_shortname='all', to_csv=False): 
+def get_funds_under_amc(amc_shortname='all', to_csv=False, path="data/funds_still_active"): 
     
     list_pair_unique_id = [('KASSET','C0000000021'), ('MFC','C0000000023'), ('TMB','C0000000182'), ('SCBAM','C0000000239')
                         , ('TISCOAM','C0000000324'), ('KTAM','C0000000460'), ('ONEAM','C0000000569')
                         , ('UOBAM','C0000000623'), ('KSAM','C0000000709'), ('ASP','C0000005022')
                         , ('PRINCIPAL','C0000005531')]
-    
-    if amc_shortname == 'all':
-        list_unique_id = [i[1] for i in list_pair_unique_id]
-    else:
-        for i in list_pair_unique_id:
-            if amc_shortname == i[0]:
-               list_pair_unique_id = [(i[0], i[1])]
-               break
     try:
         all_funds_still_active = pd.DataFrame()
         for amc_short, id in list_pair_unique_id:
@@ -74,7 +67,7 @@ def get_funds_under_amc(amc_shortname='all', to_csv=False):
         
         if to_csv:
             print('saving_to_csv...')
-            file_path = 'data/funds_still_active/all_funds_still_active.csv'
+            file_path = f'{path}/all_funds_still_active.csv'
             all_funds_still_active.to_csv(file_path, index=False)
             
         return all_funds_still_active
